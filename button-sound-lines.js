@@ -22,7 +22,8 @@
   const control = node => {
     const el = node instanceof Element ? node.closest(selector) : null;
     const isReturn = el && (el.matches('#backButton,.back-button,#previewFlip,.record-flip') || /返回|翻回正面|翻面看看|翻面/.test((el.textContent || '') + (el.getAttribute('aria-label') || '')));
-    return el && !isReturn && !el.closest('[data-sound-lines]') && !el.matches(':disabled,[aria-disabled="true"],[hidden]') ? el : null;
+    const isAudioPlayback = el && el.matches('#playRecording,.confirm-play');
+    return el && !isReturn && !isAudioPlayback && !el.closest('[data-sound-lines]') && !el.matches(':disabled,[aria-disabled="true"],[hidden]') ? el : null;
   };
   function draw(time) {
     frame = 0;
