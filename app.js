@@ -48,13 +48,14 @@ function syncTranscript(){recognizedTranscript=document.getElementById('transcri
 document.getElementById('transcript').addEventListener('input',function(){cancelTranscription();syncTranscript();document.getElementById('recognitionNote').textContent='以你确认的文字为准，原始录音会保留。'});
 function cancelCapture(){stopLiveAudio();recordingVersion++;recordingPending=false;clearInterval(timerId);timerId=null;if(mediaRecorder){mediaRecorder.onstop=null;if(mediaRecorder.state==='recording')mediaRecorder.stop()}if(mediaStream)mediaStream.getTracks().forEach(function(track){track.stop()});mediaStream=null;recordButton.disabled=false;recordButton.classList.remove('recording');document.getElementById('holdLabel').textContent='开始录音'}
 async function transcribeRecording(blob){
+ if(location.hostname.endsWith('github.io')){cancelTranscription();document.getElementById('recognitionNote').textContent='在线预览尚未连接语音识别服务。录音已保留，可试听后手动填写；自动识别请使用本机版 http://127.0.0.1:4173/。';syncTranscript();return}
  cancelTranscription();var version=transcriptionVersion,controller=new AbortController(),ctx=null;
  transcriptionController=controller;transcriptionBusy(true);syncTranscript();var timeout=setTimeout(function(){controller.abort()},30000);
  try{
   var AudioCtx=window.AudioContext||window.webkitAudioContext;if(!AudioCtx)throw new Error('当前浏览器不支持自动转写');
   ctx=new AudioCtx();var audio=await ctx.decodeAudioData(await blob.arrayBuffer());if(version!==transcriptionVersion)return;
   var response=await fetch('/api/transcribe',{method:'POST',headers:{'Content-Type':'audio/wav'},body:bufferToWav(audio),signal:controller.signal});
-  var raw=await response.text(),data;try{data=JSON.parse(raw)}catch(e){throw new Error('本机识别服务尚未启动')}
+  var raw=await response.text(),data;try{data=JSON.parse(raw)}catch(e){throw new Error(location.hostname.endsWith('github.io')?'在线预览不包含语音识别服务。请启动本机识别后在 http://127.0.0.1:4173/ 录音':'本机识别服务尚未启动')}
   if(!response.ok)throw new Error(data.error||'本机识别服务暂不可用');if(version!==transcriptionVersion)return;
   setTranscript(String(data.text||'').trim());syncTranscript();suggestDialect(recognizedTranscript);syncTranscript();
   document.getElementById('recognitionNote').textContent=recognizedTranscript?'转写完成。可以直接修改不准确的文字。':'没有识别到文字。请试听录音后填写，或重新录制。';
