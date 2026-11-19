@@ -1,0 +1,17 @@
+const assert=require('node:assert/strict'),fs=require('fs'),vm=require('vm'),path=require('path');
+const root=path.join(__dirname,'..'),app=fs.readFileSync(path.join(root,'app.js'),'utf8');
+const nodes={transcript:{value:'侬好'},confirmVoice:{},dialectSelect:{value:''}};
+const scope={document:{getElementById:id=>nodes[id]},recordedBlob:{},recognizedTranscript:'',setScreen(n){scope.screen=n},toast(){}};
+vm.createContext(scope);
+vm.runInContext(app.split(String.fromCharCode(10)).find(l=>l.startsWith('function syncTranscript()')),scope);
+scope.syncTranscript();assert.equal(nodes.confirmVoice.disabled,false,'Region must not gate transcript confirmation');
+const handler=app.slice(app.indexOf("document.getElementById('confirmVoice').onclick="),app.indexOf("window.addEventListener('xiangyin:select-dialect'"));
+vm.runInContext(handler,scope);nodes.confirmVoice.onclick();assert.equal(scope.screen,5);
+const events={},sent=[],frame={contentWindow:{}},select={options:[{value:'wu'},{value:'wuxi'}],dispatchEvent(){}};
+const bridge={location:{origin:'http://local'},Event:class{},CustomEvent:class{constructor(type,data){this.type=type;this.detail=data.detail}},document:{getElementById:id=>id==='dialectPile'?frame:select,querySelector:()=>true},window:{addEventListener(t,f){events[t]=f},dispatchEvent(e){sent.push(e)}}};
+vm.runInNewContext(fs.readFileSync(path.join(root,'dialect-flow.js'),'utf8'),bridge);
+const send=(key,origin='http://local')=>events.message({origin,source:frame.contentWindow,data:{type:'dialect:selected',key}});
+send('wuxi');assert.equal(select.value,'wuxi');assert.equal(sent[0].detail,'wuxi');send('sha');send('wu','http://other');assert.equal(sent.length,1);
+assert(app.includes('if(current===6){setScreen(5);return}'));
+const page=fs.readFileSync(path.join(root,'index.html'),'utf8');assert((/src="\/public\/dialect-picker\.html(?:\?[^"]*)?"/).test(page));
+console.log('PASS: transcript confirmation needs no region; enters region step; validated selection maps correctly; excluded/foreign selections ignored; back returns to selection.');

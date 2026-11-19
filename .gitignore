@@ -1,0 +1,13 @@
+node_modules/
+.venv/
+.models/
+.data/
+.backups/
+__pycache__/
+*.pyc
+*.log
+.DS_Store
+.env
+.env.*
+/*.png
+index.previous.html

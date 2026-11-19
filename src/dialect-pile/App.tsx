@@ -1,0 +1,1 @@
+import PileView from "./PileView"; export default function App() { return <PileView />; }
