@@ -1,6 +1,6 @@
 
 (async function(){
-var catalog;try{var response=await fetch("/record-catalog.json");if(!response.ok)throw new Error("catalog");catalog=await response.json()}catch(error){document.getElementById("toast").textContent="页面资料加载失败，请刷新重试";document.getElementById("toast").classList.add("show");return}
+var catalog=window.__xiangyinCatalog;try{if(!catalog){var response=await fetch("/record-catalog.json");if(!response.ok)throw new Error("catalog");catalog=await response.json()}}catch(error){document.getElementById("toast").textContent="页面资料加载失败，请刷新重试";document.getElementById("toast").classList.add("show");return}
 
 var wavePatterns={};try{var patternResponse=await fetch('/wave-patterns.json');if(patternResponse.ok)wavePatterns=await patternResponse.json()}catch(error){console.warn('地区音波纹样加载失败',error)}
 var dialects=[
