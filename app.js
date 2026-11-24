@@ -79,7 +79,7 @@ function suggestDialect(){var hint=document.getElementById('dialectHint');if(hin
    recordedBlob=new Blob(recParts,{type:recorder.mimeType||'audio/webm'});
    if(!recordedBlob.size){toast('没有录到声音，请重试');return}
    if(recordedUrl)URL.revokeObjectURL(recordedUrl);recordedUrl=URL.createObjectURL(recordedBlob);analyseRecording();setScreen(4);
-   document.getElementById('recognitionNote').textContent='正在本机转写，你也可以直接填写刚才说的话。';transcribeRecording(recordedBlob);
+   document.getElementById('recognitionNote').textContent=hostedRecognition?'正在使用浏览器的在线语音服务转写，你也可以直接填写。':'正在本机转写，你也可以直接填写刚才说的话。';transcribeRecording(recordedBlob);
   };
   if(hostedRecognition)browserTranscription.start(function(text){if(current===3&&text){setTranscript(text);document.getElementById('recognitionNote').textContent='正在实时识别，请说完后结束录音。'}})
   recorder.start();recStarted=Date.now();recordingPending=false;recordButton.disabled=false;recordButton.classList.add('recording');document.getElementById('holdLabel').textContent='录音中 · 点击结束';document.getElementById('recordTimer').textContent='00:00';recognitionStatus(hostedRecognition?'正在录音并使用浏览器在线语音服务转写，说完后点击结束':'正在录音，说完后点击结束');document.getElementById('recordStatus').textContent='点击圆形按钮结束 · 最长 20 秒';
