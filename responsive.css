@@ -568,3 +568,9 @@ html,body{width:100%;height:100%;overflow:hidden}
 .keepsake-scan a{color:#24231f;font-size:15px;text-underline-offset:4px}
 .keepsake-scan #cardSaveStatus:empty{display:none}
 @media(max-width:700px){.keepsake-grid{grid-template-columns:1fr;gap:28px}.keepsake-scan{gap:16px;padding:14px}.keepsake-qr{width:128px;height:128px;flex-basis:128px}.keepsake-scan strong{font-size:16px}}
+
+/* Live waveform remains visible; the static export never covers the result. */
+.result-card-image{display:none!important}
+.keepsake-actions{flex-wrap:wrap;gap:12px}
+.keepsake-actions .button{min-width:0;padding:12px 24px}
+canvas.keepsake-card-image{display:block;width:100%;height:auto;aspect-ratio:1544/940}
