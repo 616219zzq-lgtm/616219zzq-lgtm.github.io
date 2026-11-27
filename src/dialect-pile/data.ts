@@ -11,7 +11,7 @@ export type TagItem = {
 const colors = ["#ff5b37", "#17150f", "#ffc83d", "#3b5bff", "#f6a9cb", "#16a06b"];
 export const TAGS = catalog.dialects.filter(d => d.id !== "sha").map((d, i) => ({
   key: d.id, label: d.name, fill: colors[i % colors.length],
-  ink: [2,4].includes(i % colors.length) ? "#17150f" : "#fff", link: "", imageUrl: "/public/assets/dialect-labels/" + d.id + ".png"
+  ink: [2,4].includes(i % colors.length) ? "#17150f" : "#fff", link: "", imageUrl: "/public/assets/dialect-labels/" + d.id + ".webp"
 }));
 
 export const INK = "rgb(23, 21, 15)";
