@@ -554,3 +554,17 @@ html,body{width:100%;height:100%;overflow:hidden}
 .region-screen.map-entering .map-puzzle-world,.region-screen.map-entering .map-puzzle-tile{transition:none}
 @keyframes mapFadeIn{from{opacity:0}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){.region-screen.active{animation:none}}
+
+/* The result, takeaway preview and downloaded PNG share one rendered card. */
+.result-card-image{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;z-index:3;border-radius:inherit;pointer-events:none}
+.keepsake-grid{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:64px;align-items:center}
+.keepsake-preview{width:100%;min-width:0}
+.keepsake-card-image{display:block;width:100%;aspect-ratio:1544/940;height:auto;border-radius:16px;box-shadow:0 16px 36px #424b561c;background:#e6e9ec}
+.keepsake-scan{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:28px;padding:20px;background:#ffffff75;border:1px solid #d8d5cf;border-radius:18px}
+.keepsake-qr{width:156px;height:156px;flex:0 0 156px;background:white;padding:6px;border-radius:8px}
+.keepsake-qr svg{display:block;width:100%;height:100%}
+.keepsake-scan strong{font-size:20px;font-weight:600}
+.keepsake-scan p{font-size:15px;color:#6a655c;margin:10px 0;line-height:1.6}
+.keepsake-scan a{color:#24231f;font-size:15px;text-underline-offset:4px}
+.keepsake-scan #cardSaveStatus:empty{display:none}
+@media(max-width:700px){.keepsake-grid{grid-template-columns:1fr;gap:28px}.keepsake-scan{gap:16px;padding:14px}.keepsake-qr{width:128px;height:128px;flex-basis:128px}.keepsake-scan strong{font-size:16px}}
